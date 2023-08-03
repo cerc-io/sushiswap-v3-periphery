@@ -13,23 +13,22 @@ const func: DeployFunction = async function ({
 
   const chainId = await getChainId()
 
-  if (!process.env.WNATIVE_ADDRESS) {
-    throw Error(`No WNATIVE_ADDRESS for chain #${chainId}!`)
-  }
+  // Use tokens as done in tests?
+  // (test/shared/completeFixture.ts)
+  const weth9 = await deployments.get('WETH9')
 
-  if (!process.env.NATIVE_CURRENCY_LABEL) {
-    throw Error(`No NATIVE_CURRENCY_LABEL for chain #${chainId}!`)
-  }
+  // 'ETH' as a bytes32 string
+  const ethCurrencyLabel = '0x4554480000000000000000000000000000000000000000000000000000000000'
 
   console.log('Deploying NonfungibleTokenPositionDescriptor...', {
-    args: [process.env.WNATIVE_ADDRESS, process.env.NATIVE_CURRENCY_LABEL],
+    args: [weth9.address, ethCurrencyLabel],
   })
 
   const NFTDescriptor = await deployments.get('NFTDescriptor')
 
   await deploy('NonfungibleTokenPositionDescriptor', {
     from: deployer,
-    args: [process.env.WNATIVE_ADDRESS, process.env.NATIVE_CURRENCY_LABEL],
+    args: [weth9.address, ethCurrencyLabel],
     log: true,
     deterministicDeployment: false,
     libraries: {
@@ -40,6 +39,6 @@ const func: DeployFunction = async function ({
 
 func.tags = ['NonfungibleTokenPositionDescriptor']
 
-func.dependencies = ['NFTDescriptor']
+func.dependencies = ['NFTDescriptor', 'WETH9']
 
 export default func

@@ -13,9 +13,9 @@ const func: DeployFunction = async function ({
 
   const chainId = await getChainId()
 
-  if (!process.env.WNATIVE_ADDRESS) {
-    throw Error(`No WNATIVE_ADDRESS for chain #${chainId}!`)
-  }
+  // Use tokens as done in tests?
+  // (test/shared/completeFixture.ts)
+  const weth9 = await deployments.get('WETH9')
 
   if (!process.env.FACTORY_ADDRESS) {
     throw Error(`No FACTORY_ADDRESS for chain #${chainId}!`)
@@ -29,7 +29,7 @@ const func: DeployFunction = async function ({
 
   await deploy('NonfungiblePositionManager', {
     from: deployer,
-    args: [process.env.FACTORY_ADDRESS, process.env.WNATIVE_ADDRESS, NonfungibleTokenPositionDescriptor.address],
+    args: [process.env.FACTORY_ADDRESS, weth9.address, NonfungibleTokenPositionDescriptor.address],
     log: true,
     deterministicDeployment: false,
   })

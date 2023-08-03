@@ -71,6 +71,11 @@ task('add-fee-tier', 'Add fee tier')
 
 export default {
   networks: {
+    docker: {
+      url: process.env.CERC_RPC,
+      chainId: process.env.CERC_CHAIN_ID,
+      accounts: [process.env.CERC_PRIV_KEY],
+    },
     arbitrum: {
       url: 'https://arb1.arbitrum.io/rpc',
       accounts,
