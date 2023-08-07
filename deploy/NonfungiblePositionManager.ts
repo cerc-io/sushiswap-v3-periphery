@@ -38,3 +38,5 @@ func.tags = ['NonfungiblePositionManager']
 func.dependencies = ['NonfungibleTokenPositionDescriptor']
 
 export default func
+
+// Usage: yarn hardhat --network docker deploy --tags NonfungiblePositionManager
