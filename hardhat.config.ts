@@ -74,7 +74,7 @@ export default {
     docker: {
       url: process.env.ETH_RPC_ENDPOINT,
       chainId: Number(process.env.CHAIN_ID),
-      accounts: [process.env.CERC_PRIV_KEY],
+      accounts: [process.env.ACCOUNT_PRIVATE_KEY],
     },
     arbitrum: {
       url: 'https://arb1.arbitrum.io/rpc',
