@@ -11,12 +11,17 @@ const func: DeployFunction = async function ({
 
   const { deployer } = await getNamedAccounts()
 
-  await deploy('TestERC20', {
+  const existingDeployments = await deployments.all()
+  const n = Object.keys(existingDeployments).filter(key => key.startsWith('TestERC20')).length;
+  const nextDeployment = `TestERC20-${n}`
+
+  await deploy(nextDeployment, {
     from: deployer,
     // args from test/shared/completeFixture.ts
     args: [ethers.constants.MaxUint256.div(2)],
     log: true,
     deterministicDeployment: false,
+    contract: 'TestERC20'
   })
 }
 
