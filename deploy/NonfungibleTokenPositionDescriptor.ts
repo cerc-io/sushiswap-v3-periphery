@@ -13,23 +13,24 @@ const func: DeployFunction = async function ({
 
   const chainId = await getChainId()
 
-  if (!process.env.WNATIVE_ADDRESS) {
-    throw Error(`No WNATIVE_ADDRESS for chain #${chainId}!`)
-  }
+  // Use tokens as done in tests?
+  // (test/shared/completeFixture.ts)
+  const wfil = await deployments.get('WFIL')
 
-  if (!process.env.NATIVE_CURRENCY_LABEL) {
-    throw Error(`No NATIVE_CURRENCY_LABEL for chain #${chainId}!`)
-  }
+  // 'FIL' as a bytes32 string
+  const currencyLabelBuffer = Buffer.alloc(32).fill(0)
+  Buffer.from('FIL', "utf8").copy(currencyLabelBuffer);
+  const currencyLabel = `0x${currencyLabelBuffer.toString("hex")}`;
 
   console.log('Deploying NonfungibleTokenPositionDescriptor...', {
-    args: [process.env.WNATIVE_ADDRESS, process.env.NATIVE_CURRENCY_LABEL],
+    args: [wfil.address, currencyLabel],
   })
 
   const NFTDescriptor = await deployments.get('NFTDescriptor')
 
   await deploy('NonfungibleTokenPositionDescriptor', {
     from: deployer,
-    args: [process.env.WNATIVE_ADDRESS, process.env.NATIVE_CURRENCY_LABEL],
+    args: [wfil.address, currencyLabel],
     log: true,
     deterministicDeployment: false,
     libraries: {
@@ -40,6 +41,6 @@ const func: DeployFunction = async function ({
 
 func.tags = ['NonfungibleTokenPositionDescriptor']
 
-func.dependencies = ['NFTDescriptor']
+func.dependencies = ['NFTDescriptor', 'WFIL']
 
 export default func

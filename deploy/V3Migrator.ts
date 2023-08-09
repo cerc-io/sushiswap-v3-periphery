@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import { HardhatRuntimeEnvironment } from 'hardhat/types'
 import { DeployFunction } from 'hardhat-deploy/dist/types'
 
-const func: DeployFunction = async function (hre: HardhatRuntimeEnviorment) {
+const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, getChainId } = hre
   const { deploy } = deployments
 

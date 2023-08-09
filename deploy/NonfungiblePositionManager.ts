@@ -13,9 +13,7 @@ const func: DeployFunction = async function ({
 
   const chainId = await getChainId()
 
-  if (!process.env.WNATIVE_ADDRESS) {
-    throw Error(`No WNATIVE_ADDRESS for chain #${chainId}!`)
-  }
+  const wfil = await deployments.get('WFIL')
 
   if (!process.env.FACTORY_ADDRESS) {
     throw Error(`No FACTORY_ADDRESS for chain #${chainId}!`)
@@ -29,7 +27,7 @@ const func: DeployFunction = async function ({
 
   await deploy('NonfungiblePositionManager', {
     from: deployer,
-    args: [process.env.FACTORY_ADDRESS, process.env.WNATIVE_ADDRESS, NonfungibleTokenPositionDescriptor.address],
+    args: [process.env.FACTORY_ADDRESS, wfil.address, NonfungibleTokenPositionDescriptor.address],
     log: true,
     deterministicDeployment: false,
   })
@@ -40,3 +38,5 @@ func.tags = ['NonfungiblePositionManager']
 func.dependencies = ['NonfungibleTokenPositionDescriptor']
 
 export default func
+
+// Usage: yarn hardhat --network docker deploy --tags NonfungiblePositionManager
