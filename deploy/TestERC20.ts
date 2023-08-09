@@ -14,11 +14,12 @@ const func: DeployFunction = async function ({
   const existingDeployments = await deployments.all()
   const n = Object.keys(existingDeployments).filter(key => key.startsWith('TestERC20')).length;
   const nextDeployment = `TestERC20-${n}`
+  const tokenSymbol = `TEST-${n}`
 
   await deploy(nextDeployment, {
     from: deployer,
     // args from test/shared/completeFixture.ts
-    args: [ethers.constants.MaxUint256.div(2)],
+    args: [ethers.constants.MaxUint256.div(2), tokenSymbol],
     log: true,
     deterministicDeployment: false,
     contract: 'TestERC20'
